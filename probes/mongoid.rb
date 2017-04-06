@@ -7,14 +7,14 @@ if defined?(Mongoid)
     value = { 'ok' => nil }
     tries = 3
     begin
-      value = Mongoid.default_session.command({ping: 1}) 
+      value = Mongoid.default_client.command(ping: 1)
     rescue
       sleep 1
       tries -= 1
       retry unless tries <= 0
     end
-    
-    [ "Mongoid", value['ok'] == 1.0, "Ping Database"]
-  end  
+
+    [ "Mongoid", value.ok?, "Ping Database"]
+  end
 
 end
