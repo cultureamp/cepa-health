@@ -4,8 +4,8 @@
 if defined?(Rails)
 
   # A Trivial Rails probe.
-  CepaHealth.register do
-    ["Rails Major Version", true, Rails.version.split('.').first]
+  CepaHealth.register :rails do
+    ["Rails Major Version", true, Rails::VERSION::MAJOR]
   end
 
 end

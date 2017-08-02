@@ -3,7 +3,7 @@
 
 if defined?(ActiveRecord) && defined?(SQLite3)
 
-  CepaHealth.register "SQLite" do
+  CepaHealth.register :sqlite do
     begin
       ActiveRecord::Base.connection.exec_query("PRAGMA quick_check")
       [ "SQLite", true, "Quick Check" ]

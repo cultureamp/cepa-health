@@ -1,6 +1,8 @@
 # encoding: utf-8
 # Copyright © 2013 Jon Williams. See LICENSE.txt for details.
 
+require "cepa-health/engine"
+
 module CepaHealth
   attr_accessor :success
 
@@ -41,14 +43,20 @@ module CepaHealth
     end
 
     # Executes the probes.
-    # @param [ Array<String> ] filters to the given levels when the probes
-    # were registered. If no filters are specified, all probes are resulted.
-    def execute(*filters)
+    # @param [ Array<String> ] filters to the given probes, based on name
+    # If no filters are specified, all probes are resulted.
+    def execute(only:, except:)
+      only = only.nil? ? [] : parse_filters(only)
+      except = except.nil? ? [] : parse_filters(except)
       result = CepaHealth::Result.new
-      filters = filters.map { |v| v.to_s }
-      selected = filters.empty? ? probes : probes.select { |k,v| filters.include?(k) } 
+      selected = only.empty? ? probes : probes.select { |k,v| only.include?(k) }
+      selected = selected.reject { |k,v| except.include?(k) }
       selected.values.flatten(1).each { |v| result.execute(v) }
       result
+    end
+
+    def parse_filters(filters)
+      filters.split(",").map { |v| v.strip }
     end
 
     # Loads an individual probe
@@ -65,23 +73,15 @@ module CepaHealth
 
     # Registers the given block as a probe. An optional level can be supplied,
     # which can be used as a filter.
-    def register(level = :error, &block)
-      list = probes[level.to_s] ||= []
-      list << block
+    def register(name, &block)
+      probes[name.to_s] = block
       self
     end
-
   end
+
   @probes = {}
   @key = nil
 
 end
 
-require "cepa-health/middleware"
 require "cepa-health/version"
-
-# Railtie to add the Middleware Automatically
-if defined?(Rails)
-  require 'cepa-health/generator'
-  require 'cepa-health/railtie'
-end

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Health Check</title>
+    <style type='text/css'>
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+      div.container {
+        margin: 0 auto;
+        width: 960px;
+      }
+
+      h1 { font-size: 20px; font-weight: bold; }
+      h2 { font-size: 22px; font-weight: bold; }
+      h2 span { font-size: 36px; }
+
+      table {
+        border-bottom: 1px solid #999;
+        border-top: 1px solid #999;
+        margin-top: 10px;
+        width: 100%;
+      }
+
+      td {
+        font-size: 14px;
+        padding: 5px;
+      }
+      td.name { background: #f7f7f7; font-weight: bold; width: 200px; }
+      td.status { font-weight: bold;  text-align: center; width: 50px; }
+      td.status.fail { background: #fdd; color: #c00; }
+      td.status.ok { background: #dfd; color: #0c0; }
+
+      .fail h2 { color: #600; }
+      .fail span { color: #c00; text-shadow: 2px 2px 0 #600; }
+      .ok h2 { color: #060; }
+      .ok span { color: #0c0; text-shadow: 2px 2px 0 #060; }
+
+    </style>
+  </head>
+  <body class='<%= @result.success? ? 'ok' : 'fail' %>'>
+    <div class='container'>
+      <h1>Health Check</h1>
+      <h2>
+        <% if @result.success? %>
+          <span>✔</span> Great, the Application is Healthy
+        <% else %>
+          <span>✘</span> Damn, something is broken
+        <% end %>
+      </h2>
+
+      <table>
+        <% @result.records.each do |name, status, comment| %>
+          <tr>
+            <% if status %>
+              <td class='status ok'>OK</td>
+            <% else %>
+              <td class='status fail'>FAIL</td>
+            <% end %>
+            <td><%= name %></td>
+            <td><%= comment %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </body>
+</html>

@@ -3,7 +3,7 @@
 
 if defined?(Mongoid)
 
-  CepaHealth.register do
+  CepaHealth.register :mongoid do
     value = { 'ok' => nil }
     tries = 3
     begin
