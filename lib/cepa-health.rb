@@ -84,11 +84,4 @@ module CepaHealth
 
 end
 
-require "cepa-health/middleware"
 require "cepa-health/version"
-
-# Railtie to add the Middleware Automatically
-if defined?(Rails)
-  require 'cepa-health/generator'
-  require 'cepa-health/railtie'
-end
