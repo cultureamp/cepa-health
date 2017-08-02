@@ -1,5 +1,5 @@
 module CepaHealth
-  class HealthController < ApplicationController
+  class HealthController < ActionController::Base
     before_action :check_key
 
     def check
