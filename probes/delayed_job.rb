@@ -3,7 +3,7 @@
 
 if defined?(Delayed)
 
-  CepaHealth.register :delayed_job do
+  CepaHealth.register :delayed_job_stats do
     priority = ENV['MAX_PRIORITY'] || 10
     now = Time.now.utc
     record "Delayed Job Backlog", true, Delayed::Job.count
